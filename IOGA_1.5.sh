@@ -6,7 +6,7 @@
 #Dependencies marked [ ] are ideas that might be incorporated.
 #
 ##Bowtie2 [*]
-##Seqtk [*]
+##Seqtk [ ]
 ##Trimmomatic [*]
 ##Quake [*]
 ##Jellyfish 1.1 [*]
