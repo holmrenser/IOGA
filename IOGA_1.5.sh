@@ -2,7 +2,8 @@
 #
 #Author: Rens Holmer
 #
-#Dependencies:
+#Dependencies marked [*] are currently required,
+#Dependencies marked [ ] are ideas that might be incorporated.
 #
 ##Bowtie2 [*]
 ##Seqtk [*]
@@ -14,6 +15,8 @@
 ##SPAdes3.0 [*]
 ##MIX [ ]
 ##ALE [*]
+##Picardtools [*]
+##BLASTn [ ]
 #
 #wiggleplotter.py #custom python script to plot coverage.wig REQUIRES matplotlib 
 #assemblyplotter.r #custom R script to plot assembly lengths REQUIRES seqinr library
