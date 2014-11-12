@@ -21,6 +21,12 @@ SPAdes.py
 ALE
 Samtools
 
+INSTALL:
+
+run download_dependencies.sh
+add any added dependencies to the PATH (this is mentioned by the script)
+run IOGA.py -h
+
 TODO: 
 
   --BBmap outputs per contig coverage stats, need to use this in determining chloroplast inverted repeats
