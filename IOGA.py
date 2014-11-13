@@ -6,6 +6,12 @@ r1
 Dependencies: [bowtie2,bwa,bbmap],[trimmomatic,bbduk],seqtk,soapdenovo2,spades.py,ALE,BioPython
 """
 
+#from __future__ import print_function
+import matplotlib 
+matplotlib.use('Agg')
+from matplotlib import pyplot
+from pylab import *
+
 import argparse
 import datetime
 import gzip
@@ -15,7 +21,6 @@ import subprocess
 import sys
 
 from Bio import SeqIO
-
 
 def check_dependencies():
 	"""
@@ -122,9 +127,9 @@ def plot_coverage(BBmap_coverage):
 			if '#' not in line:
 				length+=1
 				line = line.split()
-				y.append(int(line[2]))
+				y.append(int(line[-1]))
 				if line[1] == '1':
-					contigbreaks.append([length,line[0]])
+					contigbreaks.append([length,'_'.join(line[0:-3])])
 	cov_mean = mean(y)
 	cov_stdev = std(y)
 	ylim(0,1.5*max(y))
@@ -383,7 +388,7 @@ def main(ref,name,forward,reverse,threads,insertsize):
 		prefix = prefix[len(prefix)-1]
 		prefix = name + '.' + prefix.split('.fasta')[0]
 		samfile = run_bbmap(final_folder,prefix,assembly,FP,RP,threads)
-		scores = run_ALE(final_folder,prefix,samfile,assembly) + stats(assembly)
+		scores = run_ALE(final_folder,prefix,samfile,assembly) + list(stats(assembly))
 		ALE_score.append(scores)
 
 	ALE_score = sorted(ALE_score,key = lambda x: float(x[1]),reverse=True)
