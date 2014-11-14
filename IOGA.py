@@ -202,12 +202,12 @@ def run_bbduk(name,forward,reverse,threads):
 	"""
 	Use BBduk to quality-trim and remove adapters
 	"""
-	adapterdir='REPLACE_ADAPTERDIR'
+	adapterdir='/mnt/nexenta/holme003/progs_nobackup/bbmap/resources/alladapters.fa.gz'
 	FP = name + '.temp.FP.fastq'
 	RP = name + '.temp.RP.fastq'
 	print '['+name+']','BBduk'
 	with open(os.devnull,'w') as fnull:
-		subprocess.call(['bbduk.sh','ref='+adapterdir,'in='+forward,'in2='+reverse,'out='+FP,'out2='+RP,'threads='+threads,'k=25','ktrim=rl','qtrim=t','minlength=32','-Xmx10G'])#,stderr=fnull,stdout=fnull)
+		subprocess.call(['bbduk.sh','ref='+adapterdir,'in='+forward,'in2='+reverse,'out='+FP,'out2='+RP,'threads='+threads,'k=25','ktrim=rl','qtrim=t','minlength=32','-Xmx10G']),stderr=fnull,stdout=fnull)
 	return FP,RP
 
 def run_trimmomatic(folder,prefix,forward,reverse,threads):
