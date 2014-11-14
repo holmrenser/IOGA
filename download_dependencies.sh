@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -f
 
 INSTALLED=()
 
@@ -9,12 +9,29 @@ cd exe
 if `type bbmap.sh >/dev/null 2>&1`
 	then
 	type bbmap.sh
+	ADAPTERDIR="`type bbmap.sh | awk '{print $3}' | sed 's/bbmap.sh//g'`resources"
 else
 	wget http://downloads.sourceforge.net/project/bbmap/BBMap_33.89_java7.tar.gz &&
 	tar -xvzf BBMap_33.89_java7.tar.gz &&
 	rm BBMap_33.89_java7.tar.gz
 	INSTALLED+=('exe/bbmap')
+	ADAPTERDIR='exe/bbmap/resources'
 fi
+rm $ADAPTERDIR/alladapters.fa.gz
+rm $ADAPTERDIR/alladapters.fa
+for file in `ls "$ADAPTERDIR"/*fa.gz`
+do
+	gunzip $file
+	unzipped_file=`echo $file | sed 's/.gz//g'`
+	cat $unzipped_file >> $ADAPTERDIR/alladapters.fa
+	gzip $unzipped_file
+done
+gzip $ADAPTERDIR/alladapters.fa
+chmod +x $ADAPTERDIR/alladapters.fa.gz
+ADAPTERDIR=`echo $ADAPTERDIR | sed 's/\//\\\\\//g'`
+sed "s/REPLACE_ADAPTERDIR/"$ADAPTERDIR"\/alladapters.fa.gz/g" ../IOGA.py > ../IOGA.py
+
+
 
 #SOAPdenovo
 if `type SOAPdenovo-127mer >/dev/null 2>&1`
