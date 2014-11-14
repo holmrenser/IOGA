@@ -31,8 +31,6 @@ chmod +x $ADAPTERDIR/alladapters.fa.gz
 ADAPTERDIR=`echo $ADAPTERDIR | sed 's/\//\\\\\//g'`
 sed "s/REPLACE_ADAPTERDIR/"$ADAPTERDIR"\/alladapters.fa.gz/g" ../IOGA.py > ../IOGA.py
 
-
-
 #SOAPdenovo
 if `type SOAPdenovo-127mer >/dev/null 2>&1`
 	then
