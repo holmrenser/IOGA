@@ -207,7 +207,7 @@ def run_bbduk(name,forward,reverse,threads):
 	RP = name + '.temp.RP.fastq'
 	print '['+name+']','BBduk'
 	with open(os.devnull,'w') as fnull:
-		subprocess.call(['bbduk.sh','ref='+adapterdir,'in='+forward,'in2='+reverse,'out='+FP,'out2='+RP,'threads='+threads,'k=25','ktrim=rl','qtrim=t','minlength=32','-Xmx10G']),stderr=fnull,stdout=fnull)
+		subprocess.call(['bbduk.sh','ref='+adapterdir,'in='+forward,'in2='+reverse,'out='+FP,'out2='+RP,'threads='+threads,'k=25','ktrim=rl','qtrim=t','minlength=32','-Xmx10G'],stderr=fnull,stdout=fnull)
 	return FP,RP
 
 def run_trimmomatic(folder,prefix,forward,reverse,threads):
