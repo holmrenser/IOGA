@@ -2,8 +2,14 @@
 
 INSTALLED=()
 
-mkdir exe
-pushd exe
+if [ -e exe ] 
+	then 
+	rm -rf exe
+	mkdir exe
+else
+	mkdir exe
+fi
+pushd exe &> /dev/null
 
 #BBMAP
 if `type bbmap.sh >/dev/null 2>&1`
@@ -17,8 +23,14 @@ else
 	INSTALLED+=('exe/bbmap')
 	ADAPTERDIR='exe/bbmap/resources'
 fi
-rm $ADAPTERDIR/alladapters.fa.gz
-rm $ADAPTERDIR/alladapters.fa
+if [ -e $ADAPTERDIR/alladapters.fa.gz ]
+	then
+	rm $ADAPTERDIR/alladapters.fa.gz
+fi
+if [ -e $ADAPTERDIR/alladapters.fa ]
+	then
+	rm $ADAPTERDIR/alladapters.fa
+fi
 for file in `ls "$ADAPTERDIR"/*fa.gz`
 do
 	gunzip $file
@@ -108,7 +120,7 @@ else
 	done
 fi
 
-popd
+popd &> /dev/null
 
 sed -i 's/setup = 0/setup = 1/g' IOGA.py &&
 printf 'Setup successful\n'
