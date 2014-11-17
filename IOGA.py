@@ -43,6 +43,8 @@ def rename_fasta(folder,prefix,ref):
 		for seq in sequences:
 			count += 1
 			seq.id = prefix + '.contig_' +str(count) 
+			seq.name = ''
+			seq.description = ''
 			SeqIO.write(seq,outfile,'fasta')
 	return temp_ref
 
@@ -129,12 +131,7 @@ def plot_coverage(BBmap_coverage):
 				line = line.split()
 				y.append(int(line[-1]))
 				if line[1] == '1':
-					contigbreaks.append([length,'_'.join(line[0:-3])])
-
-	with open('contigbreaks.txt','w') as testfile:
-		for contig in contigbreaks:
-			testfile.write(contig)
-
+					contigbreaks.append([length,'_'.join(line[:-2])])
 	cov_mean = mean(y)
 	cov_stdev = std(y)
 	ylim(0,1.5*max(y))
