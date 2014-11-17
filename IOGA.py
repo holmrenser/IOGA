@@ -6,7 +6,6 @@ r1
 Dependencies: [bowtie2,bwa,bbmap],[trimmomatic,bbduk],seqtk,soapdenovo2,spades.py,ALE,BioPython
 """
 
-#from __future__ import print_function
 import matplotlib 
 matplotlib.use('Agg')
 from matplotlib import pyplot
@@ -14,7 +13,6 @@ from pylab import *
 
 import argparse
 import datetime
-import gzip
 import os
 import shutil
 import subprocess
@@ -24,8 +22,13 @@ from Bio import SeqIO
 
 def check_dependencies():
 	"""
-	Check dependencies
+	Check dependencies, currently done by download_dependencies.sh
 	"""
+	setup = 0
+	if setup == 0:
+		print 'First run download_dependencies.sh'
+		quit()
+
 
 def check_files():
 	"""
@@ -415,19 +418,13 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds):
 
 
 if __name__ == '__main__':
-	#threads = "16"
-	#insertsize = "230"
-	#reference = sys.argv[1]
-	#name = sys.argv[2]
-	#forward = sys.argv[3]
-	#reverse = sys.argv[4]
-
+	check_dependencies()
 	if len(sys.argv) <= 1:
 		print "IOGA requires input, try 'python IOGA.py -h'"
 		quit()
-
 		
 	parser = argparse.ArgumentParser(description='IOGA')
+	
 	parser.add_argument('--reference','-r',help='reference file')
 	parser.add_argument('--name','-n',help='sample name')
 	parser.add_argument('--forward','-1',help='forward reads')

@@ -3,7 +3,7 @@
 INSTALLED=()
 
 mkdir exe
-cd exe
+pushd exe
 
 #BBMAP
 if `type bbmap.sh >/dev/null 2>&1`
@@ -29,7 +29,7 @@ done
 gzip $ADAPTERDIR/alladapters.fa
 chmod +x $ADAPTERDIR/alladapters.fa.gz
 ADAPTERDIR=`echo $ADAPTERDIR | sed 's/\//\\\\\//g'`
-sed -i "s/REPLACE_ADAPTERDIR/"$ADAPTERDIR"\/alladapters.fa.gz/g" ../IOGA.py #> ../IOGA.py
+sed -i 's/REPLACE_ADAPTERDIR/'$ADAPTERDIR'\/alladapters.fa.gz/g' ../IOGA.py #> ../IOGA.py
 
 #SOAPdenovo
 if `type SOAPdenovo-127mer >/dev/null 2>&1`
@@ -96,7 +96,7 @@ else
 	INSTALLED+=('exe/SPAdes-3.1.1-Linux/bin')
 fi
 
-printf 'Done\n'
+
 if [ ${#INSTALLED[@]} -eq 0 ]
 	then
 	printf "All dependencies were already present\n"
@@ -107,4 +107,10 @@ else
 		printf "${PWD}/$i"
 	done
 fi
+
+popd
+
+sed -i 's/setup = 0/setup = 1/g' IOGA.py &&
+printf 'Setup successful\n'
+
 
