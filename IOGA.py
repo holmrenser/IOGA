@@ -151,6 +151,7 @@ def plot_coverage(BBmap_coverage):
 	figure=gcf()
 	figure.set_size_inches(20,10)
 	savefig(BBmap_coverage+'.png',dpi=100)
+	pyplot.close()
 
 def merge_mapped_reads(folder,prefix,current_sam,previous_sam=None):
 	"""
@@ -299,6 +300,7 @@ def IOGA_loop(name,ref,forward,reverse,insertsize,threads,maxrounds):
 		iteration += 1
 		if maxrounds > 0:
 			if iteration == maxrounds:
+				iteration -= 1
 				break
 		if iteration > 2:
 			shutil.rmtree(name + '.' + str(iteration-2))
