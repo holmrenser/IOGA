@@ -134,6 +134,8 @@ def plot_coverage(BBmap_coverage):
 					contigbreaks.append([length,'_'.join(line[:-2])])
 	cov_mean = mean(y)
 	cov_stdev = std(y)
+
+	pyplot.figure()
 	ylim(0,1.5*max(y))
 	ylim(0,1.5*max(y))
 	for i in contigbreaks:
