@@ -61,9 +61,9 @@ if `type seqtk >/dev/null 2>&1`
 else
 	wget -O seqtk.zip https://github.com/lh3/seqtk/archive/master.zip &&
 	unzip seqtk.zip &&
-	pushd seqtk-master &&
+	pushd seqtk-master &> /dev/null &&
 	make &&
-	popd &&
+	popd &> /dev/null &&
 	rm seqtk.zip 
 	INSTALLED+=('exe/seqtk-master')
 fi
@@ -75,9 +75,9 @@ if `type samtools >/dev/null 2>&1`
 else
 	wget http://sourceforge.net/projects/samtools/files/samtools/0.1.19/samtools-0.1.19.tar.bz2 &&
 	tar -xvjf samtools-0.1.19.tar.bz2 &&
-	pushd samtools-0.1.19 &&
+	pushd samtools-0.1.19 &> /dev/null &&
 	make &&
-	popd &&
+	popd &> /dev/null &&
 	rm samtools-0.1.19.tar.bz2
 	INSTALLED+=('exe/samtools-0.1.19')
 fi
@@ -89,9 +89,9 @@ if `type picard.jar >/dev/null 2>&1`
 else
 	wget https://github.com/broadinstitute/picard/releases/download/1.124/picard-tools-1.124.zip &&
 	unzip picard-tools-1.124.zip &&
-	pushd picard-tools-1.124 &&
+	pushd picard-tools-1.124 &> /dev/null &&
 	chmod +x picard.jar &&
-	popd &&
+	popd &> /dev/null &&
 	rm picard-tools-1.124.zip
 	INSTALLED+=('exe/picard-tools-1.124')
 fi
@@ -106,9 +106,9 @@ if `type ALE >/dev/null 2>&1`
 else
 	wget -O ALE.zip https://github.com/sc932/ALE/archive/master.zip &&
 	unzip ALE.zip &&
-	pushd ALE-master &&
+	pushd ALE-master &> /dev/null &&
 	make &&
-	popd &&
+	popd &> /dev/null &&
 	rm ALE.zip
 	INSTALLED+=('exe/ALE-master/src')
 fi
@@ -130,16 +130,17 @@ if [ ${#INSTALLED[@]} -eq 0 ]
 	then
 	printf "All dependencies were already present\n"
 else
-	printf "Add the following folders to your PATH:\n"
+	printf "\nAdd the following folders to your PATH:\n"
 	for ((i=0;i<${#INSTALLED[@]};++i))
 	do
-		printf "${PWD}/$i"
+		FILE=${INSTALLED[$i]}
+		printf "${PWD}/$FILE\n"
 	done
 fi
 
 popd &> /dev/null
 
 sed -i 's/setup = 0/setup = 1/g' IOGA.py &&
-printf 'Setup successful\n'
+printf '\nSetup successful\n'
 
 
