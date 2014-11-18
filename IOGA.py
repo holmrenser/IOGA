@@ -2,8 +2,8 @@
 """
 Author: Rens Holmer
 Iterative Organellar Genome Assembly (IOGA)
-r1
-Dependencies: [bowtie2,bwa,bbmap],[trimmomatic,bbduk],seqtk,soapdenovo2,spades.py,ALE,BioPython
+r2
+Dependencies: [bowtie2,bwa,bbmap],[trimmomatic,bbduk],seqtk,soapdenovo2,spades.py,ALE,BioPython,picardtools
 """
 
 import matplotlib 
