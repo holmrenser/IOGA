@@ -11,7 +11,7 @@ IOGA is now written in Python.
 IOGA now uses the BBmap suite to map reads and to do quality-filtering/adapter-trimming.  
 IOGA now comes with a script to download dependencies: download_dependencies.sh, untried though.  
 
-Dependencies: Python, BioPython, BBmap, SOAPdenovo2, SeqTK, SPAdes.py, ALE, Samtools
+Dependencies: Python, BioPython, BBmap, SOAPdenovo2, SeqTK, SPAdes.py, ALE, Samtools, Picardtools
 
 ###INSTALL:
 

@@ -62,9 +62,9 @@ else
 	wget -O seqtk.zip https://github.com/lh3/seqtk/archive/master.zip &&
 	unzip seqtk.zip &&
 	pushd seqtk-master &&
-	make
-	popd
-	rm seqtk.zip
+	make &&
+	popd &&
+	rm seqtk.zip 
 	INSTALLED+=('exe/seqtk-master')
 fi
 
@@ -76,11 +76,28 @@ else
 	wget http://sourceforge.net/projects/samtools/files/samtools/0.1.19/samtools-0.1.19.tar.bz2 &&
 	tar -xvjf samtools-0.1.19.tar.bz2 &&
 	pushd samtools-0.1.19 &&
-	make
-	popd
+	make &&
+	popd &&
 	rm samtools-0.1.19.tar.bz2
 	INSTALLED+=('exe/samtools-0.1.19')
 fi
+
+#Picard tools
+if `type picard.jar >/dev/null 2>&1`
+	then
+	type picard.jar
+else
+	wget https://github.com/broadinstitute/picard/releases/download/1.124/picard-tools-1.124.zip &&
+	unzip picard-tools-1.124.zip &&
+	pushd picard-tools-1.124 &&
+	chmod +x picard.jar &&
+	popd &&
+	rm picard-tools-1.124.zip
+	INSTALLED+=('exe/picard-tools-1.124')
+fi
+
+
+
 
 #ALE
 if `type ALE >/dev/null 2>&1`
@@ -90,8 +107,8 @@ else
 	wget -O ALE.zip https://github.com/sc932/ALE/archive/master.zip &&
 	unzip ALE.zip &&
 	pushd ALE-master &&
-	make
-	popd
+	make &&
+	popd &&
 	rm ALE.zip
 	INSTALLED+=('exe/ALE-master/src')
 fi

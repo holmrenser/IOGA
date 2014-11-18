@@ -24,7 +24,7 @@ def check_dependencies():
 	"""
 	Check dependencies, currently done by download_dependencies.sh
 	"""
-	setup = 0
+	setup = 1
 	if setup == 0:
 		print 'First run download_dependencies.sh'
 		quit()
@@ -171,9 +171,9 @@ def merge_mapped_reads(folder,prefix,current_sam,previous_sam=None):
 				subprocess.call(['samtools','view','-S',current_sam],stdout=temp,stderr=fnull)
 				subprocess.call(['samtools','view','-S',previous_sam],stdout=temp,stderr=fnull)
 		print '['+prefix+']','Sorting SAM files'
-		subprocess.call(['SortSam.jar','INPUT=',folder + '/merged.sam','OUTPUT=',folder + '/merged.sorted.sam','SORT_ORDER=','coordinate'],stdout=fnull,stderr=fnull)
+		subprocess.call(['picard.jar','SortSam','INPUT=',folder + '/merged.sam','OUTPUT=',folder + '/merged.sorted.sam','SORT_ORDER=','coordinate'],stdout=fnull,stderr=fnull)
 		print '['+prefix+']','Removing duplicates'
-		subprocess.call(['MarkDuplicates.jar','INPUT=',folder + '/merged.temp.sam','OUTPUT=',folder + '/' + prefix + '.merged.sam','METRICS_FILE=',folder + '/rmdup.temp.log','REMOVE_DUPLICATES=','true','ASSUME_SORTED=','true'],stdout=fnull,stderr=fnull)
+		subprocess.call(['picard.jar','MarkDuplicates','INPUT=',folder + '/merged.temp.sam','OUTPUT=',folder + '/' + prefix + '.merged.sam','METRICS_FILE=',folder + '/rmdup.temp.log','REMOVE_DUPLICATES=','true','ASSUME_SORTED=','true'],stdout=fnull,stderr=fnull)
 	return os.path.abspath(folder + '/' + prefix + '.merged.sam')	
 
 def extract_reads(folder,prefix,samfile,forward,reverse):
@@ -408,7 +408,7 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds):
 	with open(final_folder+'/'+name+'.statistics','w') as ALE_file:
 		ALE_file.write('Filename ALE_score Contig_no Assembly_size N50_index N50\n')
 		for score in ALE_score:
-			ALE_file.write(score[0]+'\t'+score[1]+'\n')
+			ALE_file.write('\t'.join(score)+'\n')
 
 	shutil.rmtree(name+'.'+str(final_iteration))
 	shutil.rmtree(name+'.'+str(final_iteration-1))
