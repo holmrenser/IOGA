@@ -399,9 +399,12 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds):
 		prefix = assembly.split('/')
 		prefix = prefix[len(prefix)-1]
 		prefix = name + '.' + prefix.split('.fasta')[0]
-		samfile = run_bbmap(final_folder,prefix,assembly,FP,RP,threads)
-		scores = run_ALE(final_folder,prefix,samfile,assembly) + [str(x) for x in stats(assembly)]
-		ALE_score.append(scores)
+		try:
+			samfile = run_bbmap(final_folder,prefix,assembly,FP,RP,threads)
+			scores = run_ALE(final_folder,prefix,samfile,assembly) + [str(x) for x in stats(assembly)]
+			ALE_score.append(scores)
+		except:
+			print '['+prefix+']',assembly,'not found'
 
 	ALE_score = sorted(ALE_score,key = lambda x: float(x[1]),reverse=True)
 
