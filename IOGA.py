@@ -2,7 +2,7 @@
 """
 Author: Rens Holmer
 Iterative Organellar Genome Assembly (IOGA)
-r2
+r3
 Dependencies: [bowtie2,bwa,bbmap],[trimmomatic,bbduk],seqtk,soapdenovo2,spades.py,ALE,BioPython,picardtools
 """
 
@@ -375,8 +375,9 @@ def run_ALE(folder,prefix,samfile,assembly):
 	"""
 	Determine assembly likelyhood using ALE (Note: ALE favours assemblies that stack the chloroplast Inverted Repeat)
 	"""
+	print '['+prefix+']','ALE'
 	with open(os.devnull,'w') as fnull:
-		for line in subprocess.check_output(['ALE','--metagenome',samfile,assembly,folder+'/'+prefix+'.ALEOUT'],stderr=fnull).split('\n'):
+		for line in subprocess.check_output(['ALE',samfile,assembly,folder+'/'+prefix+'.ALEOUT'],stderr=fnull).split('\n'):
 			line = line.split(':')
 			if 'Total ALE Score' in line:
 				ALE_score = line[1]
