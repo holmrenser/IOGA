@@ -21,7 +21,7 @@ else
 	tar -xvzf BBMap_33.89_java7.tar.gz &&
 	rm BBMap_33.89_java7.tar.gz
 	INSTALLED+=('exe/bbmap')
-	ADAPTERDIR='exe/bbmap/resources'
+	ADAPTERDIR=${PWD}'/bbmap/resources'
 fi
 if [ -e $ADAPTERDIR/alladapters.fa.gz ]
 	then
@@ -31,7 +31,8 @@ if [ -e $ADAPTERDIR/alladapters.fa ]
 	then
 	rm $ADAPTERDIR/alladapters.fa
 fi
-for file in `ls "$ADAPTERDIR"/*fa.gz`
+#for file in `ls "$ADAPTERDIR"/\*fa.gz`
+for file in `find $ADAPTERDIR -name "*fa.gz"`
 do
 	gunzip $file
 	unzipped_file=`echo $file | sed 's/.gz//g'`
