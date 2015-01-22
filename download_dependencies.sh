@@ -126,6 +126,7 @@ else
 	INSTALLED+=('exe/SPAdes-3.1.1-Linux/bin')
 fi
 
+popd &> /dev/null
 
 if [ ${#INSTALLED[@]} -eq 0 ]
 	then
@@ -138,8 +139,6 @@ else
 		printf "${PWD}/$FILE\n"
 	done
 fi
-
-popd &> /dev/null
 
 sed -i 's/setup = 0/setup = 1/g' IOGA.py &&
 printf '\nSetup successful\n'
