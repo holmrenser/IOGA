@@ -24,3 +24,6 @@ Dependencies: Python, BioPython, BBmap, SOAPdenovo2, SeqTK, SPAdes.py, ALE, Samt
 * A final step that blasts the assembly agains the input reference to filter out contigs with no hits at all is still required
 * Random subsampling to counter excessive coverage is not implemented, if your sample has a lot of organellar reads, use seqtk sample to reduce excessive coverage
 
+
+###Dev:
+Made a first attempt at updating the IOGA pipeline to be better deployable. Think about using snakemake.
