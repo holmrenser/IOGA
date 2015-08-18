@@ -26,6 +26,6 @@ Dependencies: Python, BioPython, BBmap, SOAPdenovo2, SeqTK, SPAdes.py, ALE, Samt
 
 
 IOGA was published in The Biological Journal of the Linnean Society on 07/08/2015  
-If you use it, please cite [Bakker et al. 2015, Herbarium genomics: plastome sequence assembly from a range of herbarium specimens using an Iterative Organelle Genome Assembly pipeline, Biological Journal of the Linnean Society][1] 
+If you use it, please cite [Bakker et al. 2015][1], Herbarium genomics: plastome sequence assembly from a range of herbarium specimens using an Iterative Organelle Genome Assembly pipeline, Biol. J. Linnean Soc.
 
 [1]:http://onlinelibrary.wiley.com/doi/10.1111/bij.12642/abstract
