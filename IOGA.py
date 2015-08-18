@@ -3,7 +3,7 @@
 Author: Rens Holmer
 Iterative Organellar Genome Assembly (IOGA)
 r4
-Dependencies: bbmap,bbduk,seqtk,soapdenovo2,spades.py,ALE,BioPython,picardtools
+Dependencies: bbmap,bbduk,seqtk,soapdenovo2,spades.py,ALE,BioPython,picardtools,samtools
 """
 
 import matplotlib 
@@ -13,7 +13,9 @@ from pylab import *
 
 import argparse
 import datetime
+import logging
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -80,7 +82,7 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 		"""
 		Run bbmap to map reads to reference, default, preferred
 		"""
-		readgroup = '@RG\\tID:{0}\\tSM:{0}'.format(prefix)
+		readgroup = '@RG\\tID:{0}\\tSM:{0}\\tPG:IOGA Iterative Organellar Genome Assembly'.format(prefix)
 		samfile = '{0}/{1}.sam'.format(folder,prefix)
 		log = '{0}/{1}.bbmap.log'.format(folder,prefix)
 		mappedreads = '{0}/{1}.mapped.sam'.format(folder,prefix)
@@ -89,9 +91,9 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 		print '[{0}] BBmap'.format(prefix)
 		with open(os.devnull,'w') as fnull:
 			if verbosity:
-				subprocess.call(['bbmap.sh','ref='+ref,'in='+forward,'in2='+reverse,'threads='+threads,'outm='+mappedreads,'covstats='+covstats,'basecov='+basecov,'-Xmx10G','local=t'],stdout=fnull,stderr=fnull)
+				subprocess.call(['bbmap.sh','ref='+ref,'in='+forward,'in2='+reverse,'threads='+threads,'outm='+mappedreads,'covstats='+covstats,'basecov='+basecov,'-Xmx10G','local=t','keepnames=t'])
 			else:
-				subprocess.call(['bbmap.sh','ref='+ref,'in='+forward,'in2='+reverse,'threads='+threads,'outm='+mappedreads,'covstats='+covstats,'basecov='+basecov,'-Xmx10G','local=t'])				
+				subprocess.call(['bbmap.sh','ref='+ref,'in='+forward,'in2='+reverse,'threads='+threads,'outm='+mappedreads,'covstats='+covstats,'basecov='+basecov,'-Xmx10G','local=t','keepnames=t'],stdout=fnull,stderr=fnull)				
 		plot_coverage(basecov)
 		return os.path.abspath(mappedreads)
 
@@ -160,7 +162,8 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 			for line in subprocess.check_output(['samtools','view','-S',samfile],stderr=fnull).split('\n'):
 				if line.strip():
 					line = line.split()
-					names.append(line[0])
+					name = re.sub('#$','',line[0]) #remove trailing '#'
+					names.append(name)
 			names = set(names)
 			with open(folder + '/' + prefix + '.names','w') as outfile:
 				for name in names:
@@ -182,7 +185,10 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 		RP = '{0}.temp.filtered.R2.fastq'.format(name) 
 		print '[{0}] Quality trimming with BBduk'.format(name)
 		with open(os.devnull,'w') as fnull:
-			subprocess.call(['bbduk.sh','ref='+adapterdir,'in='+forward,'in2='+reverse,'out='+FP,'out2='+RP,'threads='+threads,'k=25','ktrim=rl','qtrim=t','minlength=32','-Xmx10G'],stderr=fnull,stdout=fnull)
+			if verbosity:
+				subprocess.call(['bbduk.sh','ref='+adapterdir,'in='+forward,'in2='+reverse,'out='+FP,'out2='+RP,'threads='+threads,'k=25','ktrim=rl','qtrim=t','minlength=32','-Xmx10G'])
+			else:
+				subprocess.call(['bbduk.sh','ref='+adapterdir,'in='+forward,'in2='+reverse,'out='+FP,'out2='+RP,'threads='+threads,'k=25','ktrim=rl','qtrim=t','minlength=32','-Xmx10G'],stderr=fnull,stdout=fnull)
 		return FP,RP
 
 	def run_soapdenovo(folder,prefix,FP,RP,insertsize,threads):
@@ -243,7 +249,12 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 		"""
 		print 'Final assemblies'
 		spades_assemblies=[]
-		os.mkdir('{0}.final'.format(name))
+		try:
+			os.mkdir('{0}.final'.format(name))
+		except:
+			shutil.rmtree('{0}.final'.format(name))
+			os.mkdir('{0}.final'.format(name))
+
 		k_list = [[33],[55],[77],[95],[33,55,77],[55,77,95],[33,95],[33,55,77,95]]
 		for k in k_list:
 			n = [str(x) for x in k]
@@ -397,11 +408,10 @@ if __name__ == '__main__':
 	parser.add_argument('--insertsize','-i',help='expected insertsize, default = 500',default='500')
 	parser.add_argument('--threads','-t',help='number of threads, default = 1',default='1')
 	parser.add_argument('--maxrounds','-m',help='maximum number of iterations, default = 0',type=int,default=0)
-	parser.add_argument('--verbose','-v',help='toggle verbosity',action='store_true',default='store_false')
+	parser.add_argument('--verbose','-v',help='toggle verbosity',action='store_true',default=False)
 
 
 	args = parser.parse_args()
-
 
 	main(args.reference,args.name,args.forward,args.reverse,args.threads,args.insertsize,args.maxrounds,args.verbose)
 
