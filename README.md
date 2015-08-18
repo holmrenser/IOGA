@@ -5,7 +5,13 @@
 
 ####Author: Rens Holmer
 
-Update 12/11/2014
+Update 18/08/2015
+
+IOGA was published in The Biological Journal of the Linnean Society on 07/08/2015  
+If you use it, please cite:  
+> [Bakker et al. 2015][1], Herbarium genomics: plastome sequence assembly from a range of herbarium specimens using an Iterative Organelle Genome Assembly pipeline, Biol. J. Linnean Soc.
+
+====
 
 IOGA is now written in Python.  
 IOGA now uses the BBmap suite to map reads and to do quality-filtering/adapter-trimming.  
@@ -25,8 +31,6 @@ Dependencies: Python, BioPython, BBmap, SOAPdenovo2, SeqTK, SPAdes.py, ALE, Samt
 * Random subsampling to counter excessive coverage is not implemented, if your sample has a lot of organellar reads, use seqtk sample to reduce excessive coverage
 
 
-IOGA was published in The Biological Journal of the Linnean Society on 07/08/2015  
-If you use it, please cite:  
-> [Bakker et al. 2015][1], Herbarium genomics: plastome sequence assembly from a range of herbarium specimens using an Iterative Organelle Genome Assembly pipeline, Biol. J. Linnean Soc.
+
 
 [1]:http://onlinelibrary.wiley.com/doi/10.1111/bij.12642/abstract
