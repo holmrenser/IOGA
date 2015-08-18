@@ -13,7 +13,7 @@ If you use it, please cite:
 
 ====
 
-Typical runtime on 4 threads is ~30minutes.  
+Typical runtime on 4 threads is ~20minutes.  
 IOGA is now written in Python.  
 IOGA now uses the BBmap suite to map reads and to do quality-filtering/adapter-trimming.  
 IOGA now comes with a script to download dependencies: download_dependencies.sh, untried though.  
