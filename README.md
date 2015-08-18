@@ -28,7 +28,7 @@ Dependencies: Python, BioPython, BBmap, SOAPdenovo2, SeqTK, SPAdes.py, ALE, Samt
 ###TODO: 
 * BBmap outputs per contig coverage stats, need to use this in determining chloroplast inverted repeats
 * A final step that blasts the assembly agains the input reference to filter out contigs with no hits at all is still required
-* Random subsampling to counter excessive coverage is not implemented, if your sample has a lot of organellar reads, use seqtk sample to reduce excessive coverage
+* Random subsampling to counter excessive coverage is not implemented, if your sample has a lot of organellar reads, use ```seqtk sample [reads.fastq] 1000000 > [1million.reads.fastq]```to reduce excessive coverage
 
 
 
