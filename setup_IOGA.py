@@ -58,6 +58,7 @@ def main():
 	Download dependencies for IOGA.py
 	"""
 	config = {}
+	failed = []
 	try:
 		os.mkdir('exe')
 	except OSError:
@@ -96,10 +97,11 @@ def main():
 			p = Popen(e.split(),stdout=PIPE,stderr=PIPE)
 			out,err = p.communicate()
 			print 'succes'
+			config[dep] = exe
 		except OSError:
 			print '{0} installation failed'.format(dep)
-			quit()
-		config[dep] = exe
+			config[dep] = ''
+			failed.append(dep)
 		if dep == 'bbmap.sh':
 			config['bbduk.sh'] = exe.strip('bbmap.sh') + 'bbduk.sh' 
 	os.chdir(original)
@@ -112,6 +114,9 @@ def main():
 
 	with open('IOGA_config.json','w') as fh:
 		json.dump(config,fh,indent=1)
+
+	for f in failed:
+		print '{0} failed, if you have installed it manually you can add it to the config'.format(f)
 
 if __name__ == '__main__':
 	main()
