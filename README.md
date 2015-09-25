@@ -16,14 +16,13 @@ If you use it, please cite:
 Typical runtime on 4 threads is ~20minutes.  
 IOGA is now written in Python.  
 IOGA now uses the BBmap suite to map reads and to do quality-filtering/adapter-trimming.  
-IOGA now comes with a script to download dependencies: download_dependencies.sh, untried though.  
+IOGA now comes with a script to download and install dependencies: setup_IOGA.py
 
 Dependencies: Python, BioPython, BBmap, SOAPdenovo2, SeqTK, SPAdes.py, ALE, Samtools 0.1.19, Picardtools
 
 ###INSTALL:
 
-* run download_dependencies.sh
-* add any added dependencies to the PATH (this is mentioned by the script)
+* run setup_IOGA.py to download dependencies, this creates IOGA_config.json
 * run IOGA.py -h
 
 ###TODO: 
