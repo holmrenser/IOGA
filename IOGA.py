@@ -108,9 +108,9 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 		print '[{0}] BBmap'.format(prefix)
 		with open(os.devnull,'w') as fnull:
 			if verbosity:
-				subprocess.call([config['bbmap'],'ref='+ref,'in='+forward,'in2='+reverse,'threads='+threads,'outm='+mappedreads,'covstats='+covstats,'basecov='+basecov,'-Xmx10G','local=t','keepnames=t'])
+				subprocess.call([config['bbmap.sh'],'ref='+ref,'in='+forward,'in2='+reverse,'threads='+threads,'outm='+mappedreads,'covstats='+covstats,'basecov='+basecov,'-Xmx10G','local=t','keepnames=t'])
 			else:
-				subprocess.call([config['bbmap'],'ref='+ref,'in='+forward,'in2='+reverse,'threads='+threads,'outm='+mappedreads,'covstats='+covstats,'basecov='+basecov,'-Xmx10G','local=t','keepnames=t'],stdout=fnull,stderr=fnull)				
+				subprocess.call([config['bbmap.sh'],'ref='+ref,'in='+forward,'in2='+reverse,'threads='+threads,'outm='+mappedreads,'covstats='+covstats,'basecov='+basecov,'-Xmx10G','local=t','keepnames=t'],stdout=fnull,stderr=fnull)				
 		plot_coverage(basecov)
 		return os.path.abspath(mappedreads)
 
