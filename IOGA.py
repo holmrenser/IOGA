@@ -22,20 +22,37 @@ import sys
 
 from Bio import SeqIO
 
+import json
+
 def check_dependencies():
 	"""
 	Check dependencies, currently done by download_dependencies.sh
 	"""
-	setup = 1
-	if setup == 0:
-		print 'First run download_dependencies.sh'
+	#horrible oneliner to get absolute path of IOGA folder
+	IOGA_path = '/'.join(os.path.abspath(sys.argv[0]).split('/')[:-1]) 
+	config_file = '{0}/IOGA_config.json'.format(IOGA_path)
+	print config_file
+	try:
+		with open(config_file,'rU') as ch:
+			config = json.load(ch)
+	except IOError:
+		print 'First run setup_IOGA.py'
 		quit()
+	missing = 0
+	for dep in config:
+		if not config[dep]:
+			missing += 0
+	if missing:
+		print 'IOGA_config.json is malformatted'
+		quit()
+	return config
+
 
 def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 	"""
 	IOGA
 	"""
-
+	config = check_dependencies()
 	def check_files():
 		"""
 		Check if all files specified are found
@@ -91,9 +108,9 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 		print '[{0}] BBmap'.format(prefix)
 		with open(os.devnull,'w') as fnull:
 			if verbosity:
-				subprocess.call(['bbmap.sh','ref='+ref,'in='+forward,'in2='+reverse,'threads='+threads,'outm='+mappedreads,'covstats='+covstats,'basecov='+basecov,'-Xmx10G','local=t','keepnames=t'])
+				subprocess.call([config['bbmap'],'ref='+ref,'in='+forward,'in2='+reverse,'threads='+threads,'outm='+mappedreads,'covstats='+covstats,'basecov='+basecov,'-Xmx10G','local=t','keepnames=t'])
 			else:
-				subprocess.call(['bbmap.sh','ref='+ref,'in='+forward,'in2='+reverse,'threads='+threads,'outm='+mappedreads,'covstats='+covstats,'basecov='+basecov,'-Xmx10G','local=t','keepnames=t'],stdout=fnull,stderr=fnull)				
+				subprocess.call([config['bbmap'],'ref='+ref,'in='+forward,'in2='+reverse,'threads='+threads,'outm='+mappedreads,'covstats='+covstats,'basecov='+basecov,'-Xmx10G','local=t','keepnames=t'],stdout=fnull,stderr=fnull)				
 		plot_coverage(basecov)
 		return os.path.abspath(mappedreads)
 
@@ -136,18 +153,18 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 				os.rename(current_sam,folder + '/'+prefix+'.merged.sam')
 			else:
 				with open(folder + '/'+prefix+'.merged.sam','w') as temp:
-					subprocess.call(['samtools','view','-HS',current_sam],stdout=temp,stderr=fnull)
-					for line in subprocess.check_output(['samtools','view','-HS',previous_sam],stderr=fnull).split('\n'):
+					subprocess.call([config['samtools'],'view','-HS',current_sam],stdout=temp,stderr=fnull)
+					for line in subprocess.check_output([config['samtools'],'view','-HS',previous_sam],stderr=fnull).split('\n'):
 						if '@PG' not in line:
 							if line.strip():
 								temp.write(line+'\n')
 				with open(folder + '/'+prefix+'.merged.sam','a') as temp:
-					subprocess.call(['samtools','view','-S',current_sam],stdout=temp,stderr=fnull)
-					subprocess.call(['samtools','view','-S',previous_sam],stdout=temp,stderr=fnull)
+					subprocess.call([config['samtools'],'view','-S',current_sam],stdout=temp,stderr=fnull)
+					subprocess.call([config['samtools'],'view','-S',previous_sam],stdout=temp,stderr=fnull)
 			print '[{0}] Sorting SAM files'.format(prefix)
-			subprocess.call(['picard.jar','SortSam','INPUT=',folder + '/merged.sam','OUTPUT=',folder + '/merged.sorted.sam','SORT_ORDER=','coordinate'],stdout=fnull,stderr=fnull)
+			subprocess.call(['java','-jar',config['picard.jar'],'SortSam','INPUT=',folder + '/merged.sam','OUTPUT=',folder + '/merged.sorted.sam','SORT_ORDER=','coordinate'],stdout=fnull,stderr=fnull)
 			print '[{0}] Removing duplicates'.format(prefix)
-			subprocess.call(['picard.jar','MarkDuplicates','INPUT=',folder + '/merged.temp.sam','OUTPUT=',folder + '/' + prefix + '.merged.sam','METRICS_FILE=',folder + '/rmdup.temp.log','REMOVE_DUPLICATES=','true','ASSUME_SORTED=','true'],stdout=fnull,stderr=fnull)
+			subprocess.call(['java','-jar',config['picard.jar'],'MarkDuplicates','INPUT=',folder + '/merged.temp.sam','OUTPUT=',folder + '/' + prefix + '.merged.sam','METRICS_FILE=',folder + '/rmdup.temp.log','REMOVE_DUPLICATES=','true','ASSUME_SORTED=','true'],stdout=fnull,stderr=fnull)
 		return os.path.abspath('{0}/{1}.merged.sam'.format(folder,prefix))
 
 	def extract_reads(folder,prefix,samfile,forward,reverse):
@@ -159,7 +176,7 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 		names = []
 		print '[{0}] Extracting reads'.format(prefix)
 		with open(os.devnull,'w') as fnull:
-			for line in subprocess.check_output(['samtools','view','-S',samfile],stderr=fnull).split('\n'):
+			for line in subprocess.check_output([config['samtools'],'view','-S',samfile],stderr=fnull).split('\n'):
 				if line.strip():
 					line = line.split()
 					name = re.sub('#$','',line[0]) #remove trailing '#'
@@ -170,25 +187,24 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 					outfile.write(name+'\n')
 			print '[{0}] Writing forward reads'.format(prefix)
 			with open(forward_out,'w') as outfile:
-				subprocess.call(['seqtk','subseq',forward,folder + '/' + prefix + '.names'],stderr=fnull,stdout=outfile)
+				subprocess.call([config['seqtk'],'subseq',forward,folder + '/' + prefix + '.names'],stderr=fnull,stdout=outfile)
 			print '[{0}] Writing reverse reads'.format(prefix)
 			with open(reverse_out,'w') as outfile:
-				subprocess.call(['seqtk','subseq',reverse,folder + '/' + prefix + '.names'],stderr=fnull,stdout=outfile)
+				subprocess.call([config['seqtk'],'subseq',reverse,folder + '/' + prefix + '.names'],stderr=fnull,stdout=outfile)
 		return forward_out,reverse_out
 
 	def run_bbduk(name,forward,reverse,threads):
 		"""
 		Use BBduk to quality-trim and remove adapters
 		"""
-		adapterdir='/mnt/nexenta/holme003/progs_nobackup/bbmap/resources/alladapters.fa.gz'
 		FP = '{0}.temp.filtered.R1.fastq'.format(name)
 		RP = '{0}.temp.filtered.R2.fastq'.format(name) 
 		print '[{0}] Quality trimming with BBduk'.format(name)
 		with open(os.devnull,'w') as fnull:
 			if verbosity:
-				subprocess.call(['bbduk.sh','ref='+adapterdir,'in='+forward,'in2='+reverse,'out='+FP,'out2='+RP,'threads='+threads,'k=25','ktrim=rl','qtrim=t','minlength=32','-Xmx10G'])
+				subprocess.call([config['bbduk.sh'],'ref='+config['adapters'],'in='+forward,'in2='+reverse,'out='+FP,'out2='+RP,'threads='+threads,'k=25','ktrim=rl','qtrim=t','minlength=32','-Xmx10G'])
 			else:
-				subprocess.call(['bbduk.sh','ref='+adapterdir,'in='+forward,'in2='+reverse,'out='+FP,'out2='+RP,'threads='+threads,'k=25','ktrim=rl','qtrim=t','minlength=32','-Xmx10G'],stderr=fnull,stdout=fnull)
+				subprocess.call([config['bbduk.sh'],'ref='+config['adapters'],'in='+forward,'in2='+reverse,'out='+FP,'out2='+RP,'threads='+threads,'k=25','ktrim=rl','qtrim=t','minlength=32','-Xmx10G'],stderr=fnull,stdout=fnull)
 		return FP,RP
 
 	def run_soapdenovo(folder,prefix,FP,RP,insertsize,threads):
@@ -222,7 +238,7 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 			err = '{0}/{1}.soap_{2}.err'.format(soap_folder,prefix,k)
 			with open(log,'w') as log:
 				with open(err,'w') as err:
-					subprocess.call(['SOAPdenovo-127mer','all','-s',soap_config_file,'-o',soap_folder + '/' + prefix + '.soap_' + k,'-K',k,'-p',threads,'-d','2'],stdout=log,stderr=err)
+					subprocess.call([config['SOAPdenovo-127mer'],'all','-s',soap_config_file,'-o',soap_folder + '/' + prefix + '.soap_' + k,'-K',k,'-p',threads,'-d','2'],stdout=log,stderr=err)
 			try:
 				statfile = '{0}/{1}.soap_{2}.scafStatistics'.format(soap_folder,prefix,k)
 				with open(statfile,'rU') as statfile:
@@ -262,7 +278,7 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 			os.mkdir(folder)
 			print '[{0}] SPAdes k = {0}'.format('.'.join(n))
 			with open(os.devnull,'w') as fnull:
-				subprocess.call(['spades.py','-o',folder,'-1',forward,'-2',reverse,'-t',threads,'-k',','.join(n),'--careful'],stderr=fnull,stdout=fnull)
+				subprocess.call([config['spades.py'],'-o',folder,'-1',forward,'-2',reverse,'-t',threads,'-k',','.join(n),'--careful'],stderr=fnull,stdout=fnull)
 				for i in 'contigs','scaffolds':		
 					try:
 						source = '{0}/{1}.fasta'.format(folder,i)
@@ -279,7 +295,7 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 		"""
 		print '[{0}] ALE'.format(prefix)
 		with open(os.devnull,'w') as fnull:
-			for line in subprocess.check_output(['ALE',samfile,assembly,folder+'/'+prefix+'.ALEOUT'],stderr=fnull).split('\n'):
+			for line in subprocess.check_output([config['ALE'],samfile,assembly,folder+'/'+prefix+'.ALEOUT'],stderr=fnull).split('\n'):
 				line = line.split(':')
 				if 'Total ALE Score' in line:
 					ALE_score = line[1]
