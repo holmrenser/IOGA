@@ -106,7 +106,7 @@ def main():
 			config['bbduk.sh'] = exe.strip('bbmap.sh') + 'bbduk.sh' 
 	os.chdir(original)
 	with contextlib.closing(gzip.open('exe/bbmap/alladapters.fa.gz','wb')) as outfile:
-		for f in glob.glob('exe/bbmap/resources/*'):
+		for f in glob.glob('exe/bbmap/resources/*fa.gz'):
 			with contextlib.closing(gzip.open(f,'rb')) as infile:
 				for line in infile:
 					outfile.write(line)
