@@ -5,8 +5,6 @@
 
 ####Author: Rens Holmer
 
-Update 18/08/2015
-
 IOGA was published in The Biological Journal of the Linnean Society on 07/08/2015  
 If you use it, please cite:  
 > [Bakker et al. 2015][1], Herbarium genomics: plastome sequence assembly from a range of herbarium specimens using an Iterative Organelle Genome Assembly pipeline, Biol. J. Linnean Soc.
