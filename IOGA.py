@@ -214,12 +214,12 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 		n50 = []
 		soap_config_file = '{0}/{1}.soap_config'.format(folder,prefix)
 		with open(soap_config_file,'w') as config_file:
-			config_file.write('max_read_len=100\n'+
+			config_file.write('max_read_len=250\n'+
 				'[LIB]\n'+
 				'avg_ins='+insertsize+'\n'+
-				'reverse_seq=1\n'
+				'reverse_seq=0\n'
 				'asm_flags=3\n'
-				'rd_len_cutoff=100\n'
+				'rd_len_cutoff=250\n'
 				'rank=0\n'
 				'pair_num_cutoff=3\n'
 				'map_len=32\n'
