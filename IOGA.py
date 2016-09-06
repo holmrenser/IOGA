@@ -302,7 +302,7 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 		return [prefix,ALE_score]
 
 
-	def IOGA_loop(name,ref,forward,reverse,insertsize,threads,maxrounds):
+	def IOGA_loop(name=,ref,forward,reverse,insertsize,threads,maxrounds):
 		"""
 		Main loop, iterate between mapping and assembling until nothing new is found.
 		"""
@@ -320,6 +320,8 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 					break
 			if iteration > 2:
 				shutil.rmtree(name + '.' + str(iteration-2))
+			if name == None:
+				name = 'IOGA_RUN'
 			if len(name.split('/')) == 1:
 				prefix = '{0}.{1}'.format(name,iteration)
 				try:
