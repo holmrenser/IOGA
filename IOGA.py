@@ -302,7 +302,7 @@ def main(ref,name,forward,reverse,threads,insertsize,maxrounds,verbosity):
 		return [prefix,ALE_score]
 
 
-	def IOGA_loop(name=,ref,forward,reverse,insertsize,threads,maxrounds):
+	def IOGA_loop(name,ref,forward,reverse,insertsize,threads,maxrounds):
 		"""
 		Main loop, iterate between mapping and assembling until nothing new is found.
 		"""
