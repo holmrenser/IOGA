@@ -18,7 +18,7 @@ dependencies = {	'samtools':{'source':'http://sourceforge.net/projects/samtools/
 					'bbmap.sh':{'source':'http://downloads.sourceforge.net/project/bbmap/BBMap_33.89_java7.tar.gz',
 								'target':'IOGA_bbmap.tgz',
 								'dir':'bbmap',
-								'unpack':'tar -xvzf IOGA_bbmap.tgz',
+								'unpack':'tar -xzf IOGA_bbmap.tgz',
 								'install':'',
 								'exe':'bbmap.sh'},
 					'SOAPdenovo-127mer':{	'source':'http://downloads.sourceforge.net/project/soapdenovo2/SOAPdenovo2/bin/r240/SOAPdenovo2-bin-LINUX-generic-r240.tgz',
