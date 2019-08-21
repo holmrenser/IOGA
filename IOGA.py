@@ -417,19 +417,19 @@ if __name__ == '__main__':
 		
 	parser = argparse.ArgumentParser(description='IOGA')
 	
-	parser.add_argument('--reference','-r',help='reference file')
-	parser.add_argument('--name','-n',help='sample name')
-	parser.add_argument('--forward','-1',help='forward reads')
-	parser.add_argument('--reverse','-2',help='reverse reads')
-	parser.add_argument('--insertsize','-i',help='expected insertsize, default = 500',default='500')
-	parser.add_argument('--threads','-t',help='number of threads, default = 1',default='1')
-	parser.add_argument('--maxrounds','-m',help='maximum number of iterations, default = 0',type=int,default=0)
-	parser.add_argument('--verbose','-v',help='toggle verbosity',action='store_true',default=False)
+	parser.add_argument('--reference','-r', help = 'reference file')
+	parser.add_argument('--name','-n', help = 'sample name, default = IOGA_RUN', default = 'IOGA_RUN')
+	parser.add_argument('--forward','-1', help = 'forward reads')
+	parser.add_argument('--reverse','-2', help = 'reverse reads')
+	parser.add_argument('--insertsize','-i', help = 'expected insertsize, default = 500',  default = '500')
+	parser.add_argument('--threads','-t', help = 'number of threads, default = 1', default = '1')
+	parser.add_argument('--maxrounds','-m', help = 'maximum number of iterations, default = 0', type = int, default = 0)
+	parser.add_argument('--verbose','-v', help = 'toggle verbosity', action = 'store_true', default = False)
 
 
 	args = parser.parse_args()
 
-	main(args.reference,args.name,args.forward,args.reverse,args.threads,args.insertsize,args.maxrounds,args.verbose)
+	main(args.reference, args.name, args.forward, args.reverse, args.threads, args.insertsize, args.maxrounds, args.verbose)
 
 
 
