@@ -4,7 +4,7 @@
 :warning: This project is no longer maintained, and no updates or new versions will be released :warning:
 
 
-IOGA was used to assemble chloroplast genomes for a range of herbarium samples, and was published in The Biological Journal of the Linnean Society on 07/08/2015. This repository contains the code that was used for the paper, and mainly serves as documentation.
+IOGA was used to assemble chloroplast genomes for a range of herbarium samples, and was published in The Biological Journal of the Linnean Society on 07/08/2015. This repository contains the code that was used for the paper (specifically, code at commit b65d22a14cffdc72f295c85f9e02ee8d5f923d5b), and mainly serves as documentation.
 
 If you use IOGA, please cite:  
 > [Bakker et al. 2015][1], Herbarium genomics: plastome sequence assembly from a range of herbarium specimens using an Iterative Organelle Genome Assembly pipeline, Biol. J. Linnean Soc.
