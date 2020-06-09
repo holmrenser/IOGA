@@ -45,7 +45,7 @@ dependencies = {	'samtools':{'source':'http://sourceforge.net/projects/samtools/
 							'unpack':'unzip IOGA_ALE.zip',
 							'install':'make',
 							'exe':'src/ALE'},
-					'spades.py':{	'source':'http://spades.bioinf.spbau.ru/release3.1.1/SPAdes-3.1.1-Linux.tar.gz',
+					'spades.py':{	'source':'http://cab.spbu.ru/files/release3.1.1/SPAdes-3.1.1-Linux.tar.gz',
 									'target':'IOGA_SPAdes.tgz',
 									'dir':'SPAdes-3.1.1-Linux',
 									'unpack':'tar -xzf IOGA_SPAdes.tgz',
